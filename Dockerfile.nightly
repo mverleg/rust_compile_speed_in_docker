@@ -27,6 +27,9 @@ COPY Cargo.lock ./Cargo.lock
 # Create a dummy main file so compiling dependencies works
 RUN mkdir src && printf "fn main() {}" > src/main.rs
 
+# Fetch everything without building
+RUN cargo fetch
+
 # Remove all the compiled stuff, only keep downloads
-RUN cargo clean --release
-RUN rm ./Cargo.toml ./Cargo.lock src/main.rs
+RUN cargo clean --release && cargo clean
+RUN rm ./Cargo.toml ./Cargo.lock
