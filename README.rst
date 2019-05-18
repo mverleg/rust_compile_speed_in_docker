@@ -5,16 +5,18 @@ Benchmark of compile speed inside and outside Docker
 Summary
 -------------------------------
 
-To get right to the point: there are slight differences between what Docker does and what the command line does, so take this with a grain of salt, but it seems Docker is about 35% slower.
+To get right to the point: no statistically significant difference between native and Docker was found.
 
 What I did
 -------------------------------
 
-I took many of the top 300 crates from crates.io and compiled them in release mode using nightly, one inside docker and once directly form the command line. (All of them compiled without any error or warning, cool right?).
+I took most of the top 60 crates from crates.io and compiled them in release mode using nightly, once inside docker and once directly form the command line. (All of them compiled without any error or warning, cool right?).
 
-Both versions use the same nightly version, the install of which is not part of the benchmark (a separate Docker image is made). The Docker image compiles the dependencies separately, since that's what I would do for caching reasons as a normal workflow. This means the process is not exactly the same with and without docker, and the difference may be as large as 3s.
+Both versions use the same nightly version, the install of which is not part of the benchmark (a separate Docker image is made). Downloading dependencies is not part of the benchmark.
 
 Wall time is compared, since the ``time`` program does not measure Docker's system and user time correctly.
+
+An earlier version used 300 crates and had Docker compile dependencies separately for caching, see ``Dockerfile.cache`` if that is of interest (caching compiled dependency is a useful Docker+Rust workflow).
 
 Get your own data
 -------------------------------
@@ -26,19 +28,26 @@ If you get different results, feel free to create an issue for them to be includ
 My results
 -------------------------------
 
-    native: real 172.71 s
-    native: real 181.85 s
-    native: real 199.70 s
+    docker: real 39.15 s
+    docker: real 40.54 s
+    docker: real 40.78 s
+    docker: real 40.95 s
+    docker: real 41.74 s
+    docker: real 41.97 s
+    docker: real 42.49 s
+    docker: real 42.51 s
+    docker: real 43.14 s
+    docker: real 45.48 s
 
-    docker: real 242.26 s
-    docker: real 257.58 s
-    docker: real 248.54 s
+    native: real 32.02 s
+    native: real 34.76 s
+    native: real 38.16 s
+    native: real 38.97 s
+    native: real 39.27 s
+    native: real 39.28 s
+    native: real 39.72 s
+    native: real 40.17 s
+    native: real 41.52 s
+    native: real 41.97 s
 
-So 185s vs 249s, about 35% extra time for Docker (statistically significant at p=0.05).
-
-Why
--------------------------------
-
-I don't know why this is the code, the difference is larger than I would have thought.
-
-If you have any idea, please create an issue or pull request!
+So 38.6ss vs 41.9s, 8.5% longer on Docker, but this result is not statistically significant.
