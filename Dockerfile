@@ -1,6 +1,9 @@
 
+## First create the compiler image by running
+##   docker build --file Dockerfile.nightly --tag bench_rust_nightly .
+
 # Make sure to change the version/date everywhere (I couldn't get ARG to work), i.e. `rustup default`
-FROM rust:1.33.0
+FROM bench_rust_nightly
 
 ENV RUST_BACKTRACE 1
 ENV RUSTFLAGS "-D warnings"
