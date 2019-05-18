@@ -1,0 +1,12 @@
+
+## First create the compiler image by running
+##   docker build --file Dockerfile.cache.nightly --tag bench_rust_nightly .
+
+# Make sure to change the version/date everywhere (I couldn't get ARG to work), i.e. `rustup default`
+FROM bench_rust_nightly
+
+# Copy the code
+COPY . ./
+
+# Compile the application
+RUN cargo "+$RUST_VERSION" build --quiet --all --release

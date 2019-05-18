@@ -1,12 +1,9 @@
 
 ## First create the compiler image by running
-##   docker build --file Dockerfile.nightly --tag bench_rust_nightly .
+##   docker build --file Dockerfile.cache.nightly --tag bench_rust_nightly .
 
 # Make sure to change the version/date everywhere (I couldn't get ARG to work), i.e. `rustup default`
 FROM bench_rust_nightly
-
-ENV RUST_BACKTRACE 1
-ENV RUSTFLAGS "-D warnings"
 
 # Copy Cargo file only to compile dependencies in a separate layer
 COPY Cargo.toml ./Cargo.toml

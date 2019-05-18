@@ -1,9 +1,10 @@
 
-## This Dockerfile sets up the nightly compiler, and should not be part of the benchmark
+## This Dockerfile.cache sets up the nightly compiler, and should not be part of the benchmark
 
 FROM rust:1.33.0 AS bench_rust_nightly
 
 ENV RUST_BACKTRACE 1
+ENV RUSTFLAGS "-D warnings"
 
 # Cache cargo dependencies
 ENV CARGO_HOME /cache/dockerout/cargo
