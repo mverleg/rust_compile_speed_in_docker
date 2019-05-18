@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from json import loads
 from sys import stderr
 
-PAGES = 3  # TODO @mark: TEMPORARY! REMOVE THIS!
+PAGES = 1
 for page in range(0, PAGES):
 	url = 'https://crates.io/api/v1/crates?page={0:d}&per_page=100&sort=recent-downloads'.format(page + 1)
 	with urlopen(url) as uh:
