@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo ">> installing correct rust version"
 RUST_VERSION="nightly-2019-05-15"
 rustup install "$RUST_VERSION"
 
 echo ">> creating rust nightly docker image"
-docker build --file Dockerfile.nightly --tag bench_rust_nightly .
+docker build --quiet --file Dockerfile.nightly --tag bench_rust_nightly .
 
-for i in `seq 1 1`
+REPS=3
+for i in `seq 1 $REPS`
 do
-    echo ">> iteration $i"
+    echo ">> iteration $i of $REPS"
 
-    echo ">> native"
-    \time --format "user %U s | sys %S s | mem %K kb" -- cargo "+$RUST_VERSION" build --all --release
+    # Native
+    cargo clean --quiet --release
+    \time --format "native: real %e s | user %U s | sys %S s | mem %K kb" -- cargo "+$RUST_VERSION" build --quiet --all --release
 
-    echo ">> docker"
-    \time --format "user %U s | sys %S s | mem %K kb" -- docker build .
+    # Docker
+    \time --format "docker: real %e s | user %U s | sys %S s | mem %K kb" -- docker build --no-cache --quiet .
+
 done

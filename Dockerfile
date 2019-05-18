@@ -13,13 +13,13 @@ COPY Cargo.toml ./Cargo.toml
 COPY Cargo.lock ./Cargo.lock
 
 # Create a dummy main file so compiling dependencies works
-RUN mkdir src && printf "// dummy file for building dependencies only" > src/main.rs
+RUN mkdir src && printf "fn main() {}" > src/main.rs
 
 # Build the dependencies, to have a cached layer
-RUN cargo build --all --release
+RUN cargo build --quiet --all --release
 
 # Copy the code
 COPY /src ./src
 
 # Compile the application
-RUN cargo build --all --release
+RUN cargo build --quiet --all --release
